@@ -19,7 +19,7 @@ public class SerializeTest
         
         _serializer.Serialize(list, ms);
         var result = Encoding.UTF8.GetString(ms.ToArray());
-        Assert.Equal("[{Data=\"\",Previous=null,Next=null,Random=null},]", result);
+        Assert.Equal(@"[{""Data"":null,""Previous"":null,""Next"":null,""Random"":null}]", result);
     }
     
     [Fact]
@@ -37,7 +37,8 @@ public class SerializeTest
         _serializer.Serialize(list, ms);
         var result = Encoding.UTF8.GetString(ms.ToArray());
         Assert.Equal(
-            "[{Data=\"test-test\",Previous=null,Next=1,Random=null},{Data=\"super-test\",Previous=0,Next=null,Random=null},]",
+            @"[{""Data"":""test-test"",""Previous"":null,""Next"":1,""Random"":null}," + 
+            @"{""Data"":""super-test"",""Previous"":0,""Next"":null,""Random"":null}]",
             result);
     }
     
@@ -62,9 +63,9 @@ public class SerializeTest
         _serializer.Serialize(node1, ms);
         var result = Encoding.UTF8.GetString(ms.ToArray());
         Assert.Equal(
-            "[{Data=\"test-test\",Previous=null,Next=1,Random=1}," +
-            "{Data=\"super-test\",Previous=0,Next=2,Random=null}," +
-            "{Data=\"super-ultra-test\",Previous=1,Next=null,Random=null},]",
+            @"[{""Data"":""test-test"",""Previous"":null,""Next"":1,""Random"":1}," +
+            @"{""Data"":""super-test"",""Previous"":0,""Next"":2,""Random"":null}," +
+            @"{""Data"":""super-ultra-test"",""Previous"":1,""Next"":null,""Random"":null}]",
             result);
     }
 }
