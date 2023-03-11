@@ -13,7 +13,7 @@ public class JsonListSerializer : IListSerializer
 
     public Task<ListNode> Deserialize(Stream s)
     {
-        return Task.FromResult(ListDeserializer.Deserialize(s));
+        return ListDeserializer.Deserialize(s);
     }
 
     public Task<ListNode> DeepCopy(ListNode head)

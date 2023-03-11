@@ -14,7 +14,7 @@ public class DeserializeTest
     }
 
     [Fact]
-    public void Deserialize_InvalidList()
+    public async Task Deserialize_InvalidList()
     {
         var raw = @"[]";
 
@@ -22,12 +22,12 @@ public class DeserializeTest
         ms.Write(Encoding.UTF8.GetBytes(raw));
         ms.Seek(0, SeekOrigin.Begin);
 
-        var result = _serializer.Deserialize(ms).Result;
+        var result = await _serializer.Deserialize(ms);
         Assert.Null(result);
     }
 
     [Fact]
-    public void Deserialize_SingleItem()
+    public async Task Deserialize_SingleItem()
     {
         var raw = @"[{""Data"":""test-test"",""Previous"":null,""Next"":null,""Random"":null}]";
 
@@ -35,7 +35,7 @@ public class DeserializeTest
         ms.Write(Encoding.UTF8.GetBytes(raw));
         ms.Seek(0, SeekOrigin.Begin);
 
-        var result = _serializer.Deserialize(ms).Result;
+        var result = await _serializer.Deserialize(ms);
         Assert.Equal("test-test", result.Data);
         Assert.Null(result.Next);
         Assert.Null(result.Previous);
@@ -43,7 +43,7 @@ public class DeserializeTest
     }
 
     [Fact]
-    public void Deserialize_TwoItems()
+    public async Task Deserialize_TwoItems()
     {
         var raw =
             @"[{""Data"":""test-test"",""Previous"":null,""Next"":1,""Random"":null},{""Data"":""super-test"",""Previous"":0,""Next"":null,""Random"":null},]";
@@ -52,7 +52,7 @@ public class DeserializeTest
         ms.Write(Encoding.UTF8.GetBytes(raw));
         ms.Seek(0, SeekOrigin.Begin);
 
-        var result = _serializer.Deserialize(ms).Result;
+        var result = await _serializer.Deserialize(ms);
         Assert.Equal("test-test", result.Data);
         Assert.NotNull(result.Next);
         Assert.Null(result.Previous);
@@ -65,7 +65,7 @@ public class DeserializeTest
     }
 
     [Fact]
-    public void Deserialize_Random1()
+    public async Task Deserialize_Random1()
     {
         var raw =
             @"[{""Data"":""test-test"",""Previous"":null,""Next"":1,""Random"":1},{""Data"":""super-test"",""Previous"":0,""Next"":null,""Random"":null},]";
@@ -74,7 +74,7 @@ public class DeserializeTest
         ms.Write(Encoding.UTF8.GetBytes(raw));
         ms.Seek(0, SeekOrigin.Begin);
 
-        var result = _serializer.Deserialize(ms).Result;
+        var result = await _serializer.Deserialize(ms);
         Assert.Equal(result.Next.Data, result.Random.Data);
         Assert.Null(result.Random.Next);
         Assert.Null(result.Random.Random);

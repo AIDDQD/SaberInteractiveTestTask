@@ -23,24 +23,24 @@ internal readonly struct NodeInfo
 
 internal static class ListDeserializer
 {
-    public static ListNode Deserialize(Stream s)
+    public static async Task<ListNode> Deserialize(Stream s)
     {
         using var streamReader = new StreamReader(s);
-        using var jsonReader = new JsonTextReader(streamReader);
+        await using var jsonReader = new JsonTextReader(streamReader);
 
-        var canRead = jsonReader.Read();
+        var canRead = await jsonReader.ReadAsync();
         if (!canRead || jsonReader.TokenType != JsonToken.StartArray)
             throw new ArgumentException("Конец потока или получен неожиданный токен", nameof(s));
 
         var nodeInfos = new List<NodeInfo>();
         try
         {
-            while (jsonReader.Read())
+            while (await jsonReader.ReadAsync())
             {
                 if (jsonReader.TokenType is not JsonToken.StartObject)
                     continue;
 
-                var nodeInfo = ParseNodeInfo(jsonReader);
+                var nodeInfo = await ParseNodeInfoAsync(jsonReader);
                 nodeInfos.Add(nodeInfo);
             }
         }
@@ -70,16 +70,16 @@ internal static class ListDeserializer
         return nodeInfos[0].Node;
     }
 
-    private static NodeInfo ParseNodeInfo(JsonReader reader)
+    private static async Task<NodeInfo> ParseNodeInfoAsync(JsonReader reader)
     {
         var fields = new Dictionary<string, string>(4);
         for (var i = 0; i < 4; i++)
         {
             if (reader.TokenType is not JsonToken.PropertyName)
-                reader.Read();
+                await reader.ReadAsync();
 
             var fieldName = reader.Value?.ToString();
-            var value = reader.ReadAsString();
+            var value = await reader.ReadAsStringAsync();
             fields[fieldName] = value;
         }
 
