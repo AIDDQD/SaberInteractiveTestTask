@@ -1,20 +1,19 @@
 using SerializerTests.Nodes;
 
-namespace SerializerTests.Implementations; 
+namespace SerializerTests.Implementations;
 
-internal static class DeepCopier {
-    public static ListNode DeepCopy(ListNode head) {
-        if (head == null)
-        {
-            return null;
-        }
-        
+internal static class DeepCopier
+{
+    public static ListNode DeepCopy(ListNode head)
+    {
+        if (head == null) return null;
+
         var copiedNodes = new Dictionary<ListNode, ListNode>();
 
         var newHead = new ListNode();
         newHead.Data = head.Data;
         copiedNodes.Add(head, newHead);
-        
+
         var currentNode = head.Next;
         var previousNode = newHead;
         while (currentNode != null)
@@ -29,14 +28,11 @@ internal static class DeepCopier {
             previousNode = newNode;
             currentNode = currentNode.Next;
         }
-        
+
         currentNode = head;
         while (currentNode != null)
         {
-            if (currentNode.Random != null)
-            {
-                copiedNodes[currentNode].Random = copiedNodes[currentNode.Random];
-            }
+            if (currentNode.Random != null) copiedNodes[currentNode].Random = copiedNodes[currentNode.Random];
 
             currentNode = currentNode.Next;
         }
