@@ -20,43 +20,43 @@ internal static class ListSerializer
         return nodeIndices;
     }
 
-    private static void WriteNode(ListNode node, IDictionary<ListNode, int> nodeIndices, JsonWriter writer)
+    private static async Task WriteNodeAsync(ListNode node, IDictionary<ListNode, int> nodeIndices, JsonWriter writer)
     {
-        writer.WriteStartObject();
+        await writer.WriteStartObjectAsync();
 
-        writer.WritePropertyName("Data");
-        writer.WriteValue(node.Data);
+        await writer.WritePropertyNameAsync("Data");
+        await writer.WriteValueAsync(node.Data);
 
-        writer.WritePropertyName("Previous");
-        writer.WriteValue(node.Previous == null ? null : nodeIndices[node.Previous]);
+        await writer.WritePropertyNameAsync("Previous");
+        await writer.WriteValueAsync(node.Previous == null ? null : nodeIndices[node.Previous]);
 
-        writer.WritePropertyName("Next");
-        writer.WriteValue(node.Next == null ? null : nodeIndices[node.Next]);
+        await writer.WritePropertyNameAsync("Next");
+        await writer.WriteValueAsync(node.Next == null ? null : nodeIndices[node.Next]);
 
-        writer.WritePropertyName("Random");
-        writer.WriteValue(node.Random == null ? null : nodeIndices[node.Random]);
+        await writer.WritePropertyNameAsync("Random");
+        await writer.WriteValueAsync(node.Random == null ? null : nodeIndices[node.Random]);
 
-        writer.WriteEndObject();
+        await writer.WriteEndObjectAsync();
     }
 
-    public static void Serialize(ListNode head, Stream s)
+    public static async Task Serialize(ListNode head, Stream s)
     {
         var indices = CreateNodeIndexDict(head);
 
         var writer = new StreamWriter(s);
-        using var jsonWriter = new JsonTextWriter(writer);
-        jsonWriter.WriteStartArray();
+        await using var jsonWriter = new JsonTextWriter(writer);
+        await jsonWriter.WriteStartArrayAsync();
 
         var next = head;
         while (next != null)
         {
-            WriteNode(next, indices, jsonWriter);
-            writer.Flush();
+            await WriteNodeAsync(next, indices, jsonWriter);
+            await writer.FlushAsync();
 
             next = next.Next;
         }
 
-        jsonWriter.WriteEndArray();
-        writer.Flush();
+        await jsonWriter.WriteEndArrayAsync();
+        await writer.FlushAsync();
     }
 }

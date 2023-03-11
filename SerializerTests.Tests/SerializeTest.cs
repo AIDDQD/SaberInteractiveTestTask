@@ -15,18 +15,18 @@ public class SerializeTest
     }
 
     [Fact]
-    public void Serialize_SingleNode()
+    public async Task Serialize_SingleNode()
     {
         var list = new ListNode();
         using var ms = new MemoryStream();
 
-        _serializer.Serialize(list, ms);
+        await _serializer.Serialize(list, ms);
         var result = Encoding.UTF8.GetString(ms.ToArray());
         Assert.Equal(@"[{""Data"":null,""Previous"":null,""Next"":null,""Random"":null}]", result);
     }
 
     [Fact]
-    public void Serialize_WithNext()
+    public async Task Serialize_WithNext()
     {
         var list = new ListNode
         {
@@ -40,7 +40,7 @@ public class SerializeTest
         node1.Previous = list;
 
         using var ms = new MemoryStream();
-        _serializer.Serialize(list, ms);
+        await _serializer.Serialize(list, ms);
         var result = Encoding.UTF8.GetString(ms.ToArray());
         Assert.Equal(
             @"[{""Data"":""test-test"",""Previous"":null,""Next"":1,""Random"":null}," +
@@ -49,7 +49,7 @@ public class SerializeTest
     }
 
     [Fact]
-    public void Serialize_WithRandom()
+    public async Task Serialize_WithRandom()
     {
         var node1 = new ListNode
         {
@@ -70,7 +70,7 @@ public class SerializeTest
         node3.Previous = node2;
 
         using var ms = new MemoryStream();
-        _serializer.Serialize(node1, ms);
+        await _serializer.Serialize(node1, ms);
         var result = Encoding.UTF8.GetString(ms.ToArray());
         Assert.Equal(
             @"[{""Data"":""test-test"",""Previous"":null,""Next"":1,""Random"":1}," +

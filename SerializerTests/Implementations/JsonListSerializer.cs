@@ -7,8 +7,7 @@ public class JsonListSerializer : IListSerializer
 {
     public Task Serialize(ListNode head, Stream s)
     {
-        ListSerializer.Serialize(head, s);
-        return Task.CompletedTask;
+        return ListSerializer.Serialize(head, s);
     }
 
     public Task<ListNode> Deserialize(Stream s)
