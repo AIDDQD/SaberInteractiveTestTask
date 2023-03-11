@@ -3,7 +3,7 @@ using SerializerTests.Nodes;
 
 namespace SerializerTests.Implementations;
 
-public class PseudoJsonListSerializer : IListSerializer
+public class JsonListSerializer : IListSerializer
 {
     public Task Serialize(ListNode head, Stream s)
     {

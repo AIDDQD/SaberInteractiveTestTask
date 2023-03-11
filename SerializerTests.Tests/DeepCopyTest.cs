@@ -10,7 +10,7 @@ public class DeepCopyTest
 
     public DeepCopyTest()
     {
-        _serializer = new PseudoJsonListSerializer();
+        _serializer = new JsonListSerializer();
     }
 
     [Fact]

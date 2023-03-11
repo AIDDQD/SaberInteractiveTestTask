@@ -11,7 +11,7 @@ public class SerializeTest
 
     public SerializeTest()
     {
-        _serializer = new PseudoJsonListSerializer();
+        _serializer = new JsonListSerializer();
     }
 
     [Fact]

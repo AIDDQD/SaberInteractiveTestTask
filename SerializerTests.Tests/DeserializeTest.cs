@@ -10,7 +10,7 @@ public class DeserializeTest
 
     public DeserializeTest()
     {
-        _serializer = new PseudoJsonListSerializer();
+        _serializer = new JsonListSerializer();
     }
 
     [Fact]
